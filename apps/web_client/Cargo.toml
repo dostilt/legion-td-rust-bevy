@@ -1,0 +1,9 @@
+[package]
+name = "web_client"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+legion_core = { path = "../../libs/legion_core" }
+bevy = { version = "0.14" }
+avian3d = "0.1"

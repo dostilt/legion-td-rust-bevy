@@ -1,0 +1,9 @@
+[package]
+name = "legion_core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = { version = "0.14", default-features = false }
+serde = { version = "1.0", features = ["derive"] }
+avian3d = "0.1"

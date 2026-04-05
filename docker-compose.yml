@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: legiontd-db
+    environment:
+      POSTGRES_USER: legiontd
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: legiontd
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U legiontd"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: legiontd-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # api-server:
+  #   build:
+  #     context: ./api
+  #   container_name: legiontd-api
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   environment:
+  #     - DATABASE_URL=postgres://legiontd:password@db:5432/legiontd
+  #     - REDIS_URL=redis://redis:6379
+
+  # game-server:
+  #   build:
+  #     context: ./server
+  #   container_name: legiontd-game-server
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   environment:
+  #     - DATABASE_URL=postgres://legiontd:password@db:5432/legiontd
+  #     - REDIS_URL=redis://redis:6379
+
+volumes:
+  postgres_data:
+  redis_data:
